@@ -1,33 +1,5 @@
-
-import sys
-
-def parse(s):
-    """
-        Takes in a string as input, and outputs all boolean literals in dictionary
-    """
-    literals = {}
-    for i in range(len(s)):
-        lit = s[i]
-        if lit in ["+", "!", "(", ")", "'"]:
-            continue
-        if (i+1 < len(s)):
-            if (s[i+1] == "'"):
-                lit += "'"
-                print(lit)
-        if lit in literals.keys():
-            literals[lit] += 1
-        else:
-            literals[lit] = 1
-    return literals
-
-def pretty_print(s, opt=None):
-    if opt:
-        print(opt, end=" ")
-    for i in range(len(s)):
-        if i == len(s)-1:
-            print(s[i])
-        else:
-            print(s[i], end="+")
+from balg.utils import create_cubes_from_string, pretty_print
+from balg.rules import apply_rules
 
 def AND(a, b):
     return a & b
@@ -47,7 +19,7 @@ def minimisations(cube):
 
 def positive_cofactor(s, x):
     list_of_cubes = []
-    for cube in s.split("+"):
+    for cube in create_cubes_from_string(s):
         if (x+"'") in cube:
             continue
         elif x in cube:
@@ -61,7 +33,7 @@ def positive_cofactor(s, x):
 
 def negative_cofactor(s, x):
     list_of_cubes = []
-    for cube in s.split("+"):
+    for cube in create_cubes_from_string(s):
         if (x+"'") in cube:
             cube = cube.replace((x+"'"), "")
             if minimisations(cube) == 1:
@@ -73,6 +45,8 @@ def negative_cofactor(s, x):
     return list_of_cubes
 
 def cofactor(s, x):
-    pos_cofactors = positive_cofactor(s, x)
-    neg_cofactors = negative_cofactor(s, x)
+    pos_cofactors = pretty_print(positive_cofactor(s, x))
+    neg_cofactors = pretty_print(negative_cofactor(s, x))
+    pos_cofactors = apply_rules(pos_cofactors)
+    neg_cofactors = apply_rules(neg_cofactors)
     return [pos_cofactors, neg_cofactors]
