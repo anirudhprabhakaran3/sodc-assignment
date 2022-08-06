@@ -1,9 +1,9 @@
-
-import sys
+from utils import remove_duplicates
 
 def parse(s):
     """
-        Takes in a string as input, and outputs all boolean literals in dictionary
+        Input: Equation in the form of string
+        Output: Dict of literals and their count
     """
     literals = {}
     for i in range(len(s)):
@@ -21,8 +21,18 @@ def parse(s):
     return literals
 
 def pretty_print(s, opt=None):
+    """
+        Inputs:
+            s: List of cubes to be printed in Sum of Products (SOP) form
+            opt: Optional. If provided, will be printed at the beginning, and terminated with a space.
+        Output:
+            None
+    """
     if opt:
         print(opt, end=" ")
+    if len(s) == 0:
+        print(0)
+        return
     for i in range(len(s)):
         if i == len(s)-1:
             print(s[i])
@@ -30,10 +40,22 @@ def pretty_print(s, opt=None):
             print(s[i], end="+")
 
 def AND(a, b):
-    return a & b
+    """
+        Inputs: a and b are list of cubes
+        Output: list of cubes that corresponds to a&b
+    """
+    final_list = []
+    for cube_a in a:
+        for cube_b in b:
+            final_list.append(remove_duplicates(cube_a+cube_b))
+    return final_list
 
 def OR(a, b):
-    return a | b
+    """
+        Inputs: a and b are list of cubes
+        Output: list of cubes that corresponds to a|b
+    """
+    return a+b
 
 def NOT(a):
     return not a
@@ -42,12 +64,22 @@ def XOR(a, b):
     return (OR(AND(a, NOT(b)), AND(NOT(a), b)))
 
 def minimisations(cube):
+    """
+        Input: One cube
+        Output: 1 if the cube is empty.
+    """
     if cube == "":
         return 1
 
 def positive_cofactor(s, x):
+    """
+        Input:
+            s: List of cubes
+            x: Literal with respect to which positive cofactor will be calculated
+        Output: List of cubes corresponding to positive cofactor
+    """
     list_of_cubes = []
-    for cube in s.split("+"):
+    for cube in s:
         if (x+"'") in cube:
             continue
         elif x in cube:
@@ -60,8 +92,14 @@ def positive_cofactor(s, x):
 
 
 def negative_cofactor(s, x):
+    """
+        Input:
+            s: List of cubes
+            x: Literal with respect to which negative cofactor will be calculated
+        Output: List of cubes corresponding to negative cofactor
+    """
     list_of_cubes = []
-    for cube in s.split("+"):
+    for cube in s:
         if (x+"'") in cube:
             cube = cube.replace((x+"'"), "")
             if minimisations(cube) == 1:
@@ -73,6 +111,13 @@ def negative_cofactor(s, x):
     return list_of_cubes
 
 def cofactor(s, x):
+    """
+    Wrapper function to find both cofactors
+    Inputs:
+        s: List of cubes
+        x: Literal with respect to which cofactors will be calculated
+    Output: Tuple consisting of (positive cofactor, negative cofactor)
+    """
     pos_cofactors = positive_cofactor(s, x)
     neg_cofactors = negative_cofactor(s, x)
-    return [pos_cofactors, neg_cofactors]
+    return (pos_cofactors, neg_cofactors)
