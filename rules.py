@@ -1,3 +1,41 @@
+def identity_and(s):
+    """
+        Input: List of cubes
+        Output: List of cubes after applying aA = 0
+    """
+    new_cube_list = []
+    for cube in s:
+        flag = True
+        for i in cube:
+            if i.lower() in cube and i.upper() in cube:
+                flag = False
+                continue
+        if flag:
+            new_cube_list.append(cube)
+
+    if len(new_cube_list) > 0:
+        return new_cube_list
+    else:
+        return ["0"]
+
+def identity_or(s):
+    """
+        Input: List of cubes
+        Output: List of cubes after applying a+A = 1
+    """
+    single_cube_list = []
+    for cube in s:
+        if len(cube) == 1:
+            if cube == "0" or cube == "1":
+                continue
+            single_cube_list.append(cube)
+            x = cube.lower()
+            X = cube.upper()
+            if x in single_cube_list and X in single_cube_list:
+                return ["1"]
+    
+    return s
+
 def idempotent(s):
     """
         A+A = A
@@ -6,53 +44,26 @@ def idempotent(s):
 
 def absoption(s):
     """
-        A+AB = A
+        Input: List of cubes
+        Output: List of cubes after applying a+ac=a
     """
-    final_cubes = []
-    ignored_indices = []
-    for i in range(len(s)):
-        if i in ignored_indices:
-            continue
-        for j in range(i+1, len(s)):
-            if s[i] in s[j]:
-                ignored_indices.append(j)
-                continue
-            else:
-                final_cubes.append(s[j])
-        final_cubes.append(s[i])
-    return idempotent(final_cubes)
-
-def distributive(s):
-    final_cubes = []
+    final_cube_list = s.copy()
+    for cube in s:
+        temp_list = s.copy()
+        temp_list.remove(cube)
+        for c in temp_list:
+            if cube in c:
+                final_cube_list.remove(c)
+    return final_cube_list
 
 def apply_rules(s):
+    """
+        Wrapper function to apply all rules
+        Input: List of cubes
+        Output: List of cubes after applying the rules
+    """
+    s = identity_and(s)
+    s = identity_or(s)
     s = absoption(s)
     s = idempotent(s)
     return s
-
-def boolean_not(cube):
-    if "0'" in cube:
-        cube.replace("0'", "1")
-    if "1'" in cube:
-        cube.replace("1'", "0")
-    return cube
-
-def boolean_and(cube):
-    if "0" in cube:
-        cube = "0"
-    if "1" in cube:
-        cube.replace("1", "")
-    return cube
-
-def boolean_or(s):
-    for i in s:
-        if i == 1:
-            return ["1"]
-        
-        if i == 0:
-            s.remove(i)
-    return s
-
-def sanitise(s):
-    s = [boolean_and(boolean_not(x)) for x in s]
-    return boolean_or(s)

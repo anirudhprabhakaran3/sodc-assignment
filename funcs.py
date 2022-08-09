@@ -1,45 +1,5 @@
-from itertools import chain
-from rules import apply_rules, sanitise
-
-def parse(s):
-    """
-        Input: Equation in the form of string
-        Output: Dict of literals and their count
-    """
-    literals = {}
-    for i in range(len(s)):
-        lit = s[i]
-        if lit in ["+", "!", "(", ")", "'"]:
-            continue
-        if (i+1 < len(s)):
-            if (s[i+1] == "'"):
-                lit += "'"
-                print(lit)
-        if lit in literals.keys():
-            literals[lit] += 1
-        else:
-            literals[lit] = 1
-    return literals
-
-def pretty_print(s, opt=None):
-    """
-        Inputs:
-            s: List of cubes to be printed in Sum of Products (SOP) form
-            opt: Optional. If provided, will be printed at the beginning, and terminated with a space.
-        Output:
-            None
-    """
-    s = apply_rules(s)
-    if opt:
-        print(opt, end=" ")
-    if len(s) == 0:
-        print(0)
-        return
-    for i in range(len(s)):
-        if i == len(s)-1:
-            print(s[i])
-        else:
-            print(s[i], end="+")
+from rules import apply_rules
+from utils import remove_duplicates
 
 def AND(a, b):
     """
@@ -50,14 +10,14 @@ def AND(a, b):
     for cube_a in a:
         for cube_b in b:
             final_list.append(cube_a+cube_b)
-    return final_list
+    return remove_duplicates(final_list)
 
 def OR(a, b):
     """
         Inputs: a and b are list of cubes
         Output: list of cubes that corresponds to a|b
     """
-    return a+b
+    return remove_duplicates(a+b)
 
 def NOT(a):
     """
@@ -68,33 +28,28 @@ def NOT(a):
     for cube in a:
         notted_cube = []
         for i in cube:
-            if i == "'":
-                notted_cube[-1] = notted_cube[-1][0]
+            if i == "0":
+                notted_cube.append("1")
+            elif i == "1":
+                notted_cube.append("0")
+            elif i.isupper():
+                notted_cube.append(i.lower())
             else:
-                notted_cube.append(i+"'")
+                notted_cube.append(i.upper())
         new_list.append(notted_cube)
 
     while(len(new_list) > 1):
         first = new_list[0]
         second = new_list[1]
-        anded = AND(first, second)
+        new_list.append(AND(first, second))
         new_list.remove(first)
         new_list.remove(second)
-        new_list.append(anded)
-
-    return list(chain(*new_list))
+    
+    return remove_duplicates(new_list[0])
 
 
 def XOR(a, b):
-    return (OR(AND(a, NOT(b)), AND(NOT(a), b)))
-
-def minimisations(cube):
-    """
-        Input: One cube
-        Output: 1 if the cube is empty.
-    """
-    if cube == "":
-        return 1
+    return OR(AND(a, NOT(b)), AND(NOT(a), b))
 
 def positive_cofactor(s, x):
     """
@@ -103,16 +58,25 @@ def positive_cofactor(s, x):
             x: Literal with respect to which positive cofactor will be calculated
         Output: List of cubes corresponding to positive cofactor
     """
+
     list_of_cubes = []
+    X = x.upper()
+    x = X.lower()
+
     for cube in s:
-        if (x+"'") in cube:
+        if X in cube:
             continue
-        elif x in cube:
+        if x in cube:
             cube = cube.replace(x, "")
-            if minimisations(cube) == 1:
-                list_of_cubes.append("1")
-                break
+            if cube == "":
+                cube = "1"
         list_of_cubes.append(cube)
+
+    if "1" in list_of_cubes:
+        list_of_cubes = ["1"]
+
+    list_of_cubes = remove_duplicates(list_of_cubes)
+
     if len(list_of_cubes) > 0:
         return list_of_cubes
     else:
@@ -126,16 +90,25 @@ def negative_cofactor(s, x):
             x: Literal with respect to which negative cofactor will be calculated
         Output: List of cubes corresponding to negative cofactor
     """
+
     list_of_cubes = []
+    X = x.upper()
+    x = X.lower()
+
     for cube in s:
-        if (x+"'") in cube:
-            cube = cube.replace((x+"'"), "")
-            if minimisations(cube) == 1:
-                list_of_cubes.append("1")
-                break
-        elif x in cube:
+        if x in cube:
             continue
+        if X in cube:
+            cube = cube.replace(X, "")
+            if cube == "":
+                cube = "1"
         list_of_cubes.append(cube)
+
+    if "1" in list_of_cubes:
+        list_of_cubes = ["1"]
+
+    list_of_cubes = remove_duplicates(list_of_cubes)
+        
     if len(list_of_cubes) > 0:
         return list_of_cubes
     else:

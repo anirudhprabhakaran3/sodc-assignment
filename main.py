@@ -1,24 +1,18 @@
-from utils import process
-from operations import cofactor, boolean_difference, consensus, smoothing
+from utils import process, pretty_print, convert_dash_to_caps
+from operations import cofactor, boolean_difference, smoothing, consensus
 
-eq1 = "ab"
-eq2 = "ab"
-x = "b"
-eq1 = process(eq1)
-eq2 = process(eq2)
+a = "a+b'cd'+a'd"
+print(convert_dash_to_caps(a))
+x='c'
+a = process(a)
 
-print(eq1)
-print(x)
+pc, nc = cofactor(a, x)
+bd = boolean_difference(a, x)
+sm = smoothing(a, x)
+cs = consensus(a, x)
 
-print()
-
-pc, nc = cofactor(eq1, x)
-bd = boolean_difference(eq1, x)
-sm = smoothing(eq1, x)
-cs = consensus(eq1, x)
-
-print(nc)
-print(pc)
-print(bd)
-print(sm)
-print(cs)
+pretty_print(pc)
+pretty_print(nc)
+pretty_print(bd)
+pretty_print(sm)
+pretty_print(cs)
