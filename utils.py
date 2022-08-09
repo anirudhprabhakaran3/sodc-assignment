@@ -17,8 +17,15 @@ def remove_duplicates(s):
         Input: A string
         Output: String with duplicates removed.
     """
-    str = "".join(set(s))
-    return "".join(sorted(str))
+    seen = set()
+    seen_add = seen.add
+    new_str = []
+    for x in s:
+        if x == "'":
+            continue
+    return "".join([x for x in s if not (x in seen or seen_add(x))])
+    # str = "".join(set(s))
+    # return "".join(sorted(str))
 
 def process(s):
     """

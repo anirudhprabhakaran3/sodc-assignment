@@ -1,4 +1,5 @@
-from utils import remove_duplicates
+from itertools import chain
+from rules import apply_rules, sanitise
 
 def parse(s):
     """
@@ -28,6 +29,7 @@ def pretty_print(s, opt=None):
         Output:
             None
     """
+    s = apply_rules(s)
     if opt:
         print(opt, end=" ")
     if len(s) == 0:
@@ -47,7 +49,7 @@ def AND(a, b):
     final_list = []
     for cube_a in a:
         for cube_b in b:
-            final_list.append(remove_duplicates(cube_a+cube_b))
+            final_list.append(cube_a+cube_b)
     return final_list
 
 def OR(a, b):
@@ -58,7 +60,30 @@ def OR(a, b):
     return a+b
 
 def NOT(a):
-    return not a
+    """
+        Input: List of cubes
+        Output: List of cubes, corresponding to NOT of input
+    """
+    new_list = []
+    for cube in a:
+        notted_cube = []
+        for i in cube:
+            if i == "'":
+                notted_cube[-1] = notted_cube[-1][0]
+            else:
+                notted_cube.append(i+"'")
+        new_list.append(notted_cube)
+
+    while(len(new_list) > 1):
+        first = new_list[0]
+        second = new_list[1]
+        anded = AND(first, second)
+        new_list.remove(first)
+        new_list.remove(second)
+        new_list.append(anded)
+
+    return list(chain(*new_list))
+
 
 def XOR(a, b):
     return (OR(AND(a, NOT(b)), AND(NOT(a), b)))
@@ -85,10 +110,13 @@ def positive_cofactor(s, x):
         elif x in cube:
             cube = cube.replace(x, "")
             if minimisations(cube) == 1:
-                list_of_cubes.append(1)
+                list_of_cubes.append("1")
                 break
         list_of_cubes.append(cube)
-    return list_of_cubes
+    if len(list_of_cubes) > 0:
+        return list_of_cubes
+    else:
+        return ["0"]
 
 
 def negative_cofactor(s, x):
@@ -103,21 +131,12 @@ def negative_cofactor(s, x):
         if (x+"'") in cube:
             cube = cube.replace((x+"'"), "")
             if minimisations(cube) == 1:
-                list_of_cubes.append(1)
+                list_of_cubes.append("1")
                 break
         elif x in cube:
             continue
         list_of_cubes.append(cube)
-    return list_of_cubes
-
-def cofactor(s, x):
-    """
-    Wrapper function to find both cofactors
-    Inputs:
-        s: List of cubes
-        x: Literal with respect to which cofactors will be calculated
-    Output: Tuple consisting of (positive cofactor, negative cofactor)
-    """
-    pos_cofactors = positive_cofactor(s, x)
-    neg_cofactors = negative_cofactor(s, x)
-    return (pos_cofactors, neg_cofactors)
+    if len(list_of_cubes) > 0:
+        return list_of_cubes
+    else:
+        return ["0"]

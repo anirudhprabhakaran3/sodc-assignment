@@ -1,29 +1,24 @@
-from funcs import cofactor, pretty_print, AND, OR
-from rules import absoption
 from utils import process
+from operations import cofactor, boolean_difference, consensus, smoothing
 
-print("Enter the boolean equation")
-eq = input()
-print("Enter variable to find cofactor wrt")
-x = input()
-eq = process(eq)
-cofactors = cofactor(eq, x)
-pretty_print(cofactors[0], opt="Positive cofactors:")
-pretty_print(cofactors[1], opt="Negative cofactors:")
+eq1 = "ab"
+eq2 = "ab"
+x = "b"
+eq1 = process(eq1)
+eq2 = process(eq2)
 
-print()
-
-print("After applying rules")
-pretty_print(absoption(eq))
-pretty_print(absoption(cofactors[0]))
-pretty_print(absoption(cofactors[1]))
+print(eq1)
+print(x)
 
 print()
 
-s1 = "ab+bc"
-s2 = "cd"
-s1 = process(s1)
-s2 = process(s2)
+pc, nc = cofactor(eq1, x)
+bd = boolean_difference(eq1, x)
+sm = smoothing(eq1, x)
+cs = consensus(eq1, x)
 
-pretty_print(AND(s1, s2))
-pretty_print(OR(s1, s2))
+print(nc)
+print(pc)
+print(bd)
+print(sm)
+print(cs)
