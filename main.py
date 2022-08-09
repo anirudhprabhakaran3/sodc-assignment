@@ -1,9 +1,24 @@
-from funcs import cofactor, pretty_print
+from utils import process
+from operations import cofactor, boolean_difference, consensus, smoothing
 
-print("Enter the boolean equation")
-eq = input()
-print("Enter variable to find cofactor wrt")
-x = input()
-cofactors = cofactor(eq, x)
-pretty_print(cofactors[0], opt="Positive cofactors:")
-pretty_print(cofactors[1], opt="Negative cofactors:")
+eq1 = "ab"
+eq2 = "ab"
+x = "b"
+eq1 = process(eq1)
+eq2 = process(eq2)
+
+print(eq1)
+print(x)
+
+print()
+
+pc, nc = cofactor(eq1, x)
+bd = boolean_difference(eq1, x)
+sm = smoothing(eq1, x)
+cs = consensus(eq1, x)
+
+print(nc)
+print(pc)
+print(bd)
+print(sm)
+print(cs)
