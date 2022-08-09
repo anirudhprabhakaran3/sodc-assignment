@@ -1,7 +1,7 @@
-from funcs import positive_cofactor, negative_cofactor
-from funcs import AND, OR, XOR
-from rules import apply_rules
-from utils import boolean_fns
+from boolalg.funcs import positive_cofactor, negative_cofactor
+from boolalg.funcs import AND, OR, XOR
+from boolalg.rules import apply_rules
+from boolalg.utils import boolean_fns
 
 def cofactor(s, x):
     """

@@ -1,5 +1,4 @@
-from rules import apply_rules
-from utils import remove_duplicates
+from boolalg.utils import remove_duplicates
 
 def AND(a, b):
     """
