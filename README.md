@@ -12,6 +12,9 @@ python main.py
 
 ## Implementation Plan
     - [X] Cofactors
-    - [ ] Boolean Difference
-    - [ ] Consensus
-    - [ ] Smoothing
+    - [X] Boolean Difference
+    - [X] Consensus
+    - [X] Smoothing
+
+## Credits
+Done by Anirudh Prabhakaran, (201EC106) and Jaya Srivastava (201EC124)
