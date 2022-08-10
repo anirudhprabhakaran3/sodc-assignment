@@ -1,7 +1,7 @@
-from funcs import positive_cofactor, negative_cofactor
-from funcs import AND, OR, XOR
-from rules import apply_rules
-from utils import boolean_fns
+from boolalg.funcs import positive_cofactor, negative_cofactor
+from boolalg.funcs import AND, OR, XOR
+from boolalg.rules import apply_rules
+from boolalg.utils import boolean_fns, order
 
 def cofactor(s, x):
     """
@@ -11,8 +11,8 @@ def cofactor(s, x):
         x: Literal with respect to which cofactors will be calculated
     Output: Tuple consisting of (positive cofactor, negative cofactor)
     """
-    pos_cofactors = apply_rules(positive_cofactor(s, x))
-    neg_cofactors = apply_rules(negative_cofactor(s, x))
+    pos_cofactors = order(apply_rules(positive_cofactor(s, x)))
+    neg_cofactors = order(apply_rules(negative_cofactor(s, x)))
     return (pos_cofactors, neg_cofactors)
 
 def boolean_difference(s, x):
@@ -25,7 +25,7 @@ def boolean_difference(s, x):
             List of cubes corresponding to Boolean Difference function
     """
     pos_cofactor, neg_cofactor = cofactor(s, x)
-    return apply_rules(boolean_fns(XOR(pos_cofactor, neg_cofactor)))
+    return order(apply_rules(boolean_fns(XOR(pos_cofactor, neg_cofactor))))
 
 def smoothing(s, x):
     """
@@ -37,7 +37,7 @@ def smoothing(s, x):
             List of cubes corresponding to Smoothing function
     """
     pos_cofactor, neg_cofactor = cofactor(s, x)
-    return apply_rules(boolean_fns(OR(pos_cofactor, neg_cofactor)))
+    return order(apply_rules(boolean_fns(OR(pos_cofactor, neg_cofactor))))
 
 def consensus(s, x):
     """
@@ -49,4 +49,4 @@ def consensus(s, x):
             List of cubes corresponding to Consensus function
     """
     pos_cofactor, neg_cofactor = cofactor(s, x)
-    return apply_rules(boolean_fns(AND(pos_cofactor, neg_cofactor)))
+    return order(apply_rules(boolean_fns(AND(pos_cofactor, neg_cofactor))))

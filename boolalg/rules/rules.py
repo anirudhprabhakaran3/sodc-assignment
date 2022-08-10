@@ -6,6 +6,9 @@ def identity_and(s):
     new_cube_list = []
     for cube in s:
         flag = True
+        if cube == "0" or cube == "1":
+            new_cube_list.append(cube)
+            continue
         for i in cube:
             if i.lower() in cube and i.upper() in cube:
                 flag = False
@@ -42,7 +45,7 @@ def idempotent(s):
     """
     return [*set(s)]
 
-def absoption(s):
+def absorption(s):
     """
         Input: List of cubes
         Output: List of cubes after applying a+ac=a
@@ -64,6 +67,7 @@ def apply_rules(s):
     """
     s = identity_and(s)
     s = identity_or(s)
-    s = absoption(s)
+    s = [i for i in s if i]
+    s = absorption(s)
     s = idempotent(s)
     return s
