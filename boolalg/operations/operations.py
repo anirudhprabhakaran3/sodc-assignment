@@ -50,3 +50,14 @@ def consensus(s, x):
     """
     pos_cofactor, neg_cofactor = cofactor(s, x)
     return order(apply_rules(boolean_fns(AND(pos_cofactor, neg_cofactor))))
+
+def stringify(s):
+    """
+        Input:
+            s: List of cubes
+
+        Output:
+            Combined string of all substrings in the list
+    
+    """
+    return "".join(s)

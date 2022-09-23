@@ -1,4 +1,4 @@
-from boolalg.utils import process, pretty_print, convert_dash_to_caps
+from boolalg.utils import process, pretty_print
 from boolalg.operations import cofactor, boolean_difference, smoothing, consensus
 
 print("RULES FOR ENTERING EQUATION")
