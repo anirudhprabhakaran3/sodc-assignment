@@ -45,8 +45,8 @@ class BDD:
             self.all_nodes[right_child] = self.ONE
             pc_tuple = (node.name, self.ONE.name, {'color': 'blue'})
             nc_tuple = (node.name, self.ZERO.name, {'color': 'red'})
-            self.edges.append(pc_tuple)
-            self.edges.append(nc_tuple)
+            self.edges.append((node.id, self.ONE.id, {'color': 'blue'}))
+            self.edges.append((node.id, self.ZERO.id, {'color': 'red'}))
             return
 
         pc, nc = cofactor(f, node.name)
@@ -62,12 +62,12 @@ class BDD:
             node.set_right_child(self.ONE)
             self.all_nodes[right_child] = self.ONE
             pc_tuple = (node.name, self.ONE.name, {'color': 'blue'})
-            self.edges.append(pc_tuple)
+            self.edges.append((node.id, self.ONE.id, {'color': 'blue'}))
         elif pc == ['0']:
             node.set_right_child(self.ZERO)
             self.all_nodes[right_child] = self.ZERO
             pc_tuple = (node.name, self.ZERO.name, {'color': 'blue'})
-            self.edges.append(pc_tuple)
+            self.edges.append((node.id, self.ZERO.id, {'color': 'blue'}))
         else:
             for char in self.order[index_in_order+1:]:
                 if (pc_count < 1) and (char in pc_string):
@@ -75,7 +75,7 @@ class BDD:
                     node.set_right_child(new_pc_node)
                     self.all_nodes[right_child] = new_pc_node
                     pc_tuple = (node.name, new_pc_node.name, {'color': 'blue'})
-                    self.edges.append(pc_tuple)
+                    self.edges.append((node.id, new_pc_node.id, {'color': 'blue'}))
                     pc_count += 1
 
         # Proecssing negative cofactor
@@ -84,12 +84,12 @@ class BDD:
             node.set_left_child(self.ONE)
             self.all_nodes[left_child] = self.ONE
             nc_tuple = (node.name, self.ONE.name, {'color': 'red'})
-            self.edges.append(nc_tuple)
+            self.edges.append((node.id, self.ONE.id, {'color': 'red'}))
         elif nc == ['0']:
             node.set_left_child(self.ZERO)
             self.all_nodes[left_child] = self.ZERO
             nc_tuple = (node.name, self.ZERO.name, {'color': 'red'})
-            self.edges.append(nc_tuple)
+            self.edges.append((node.id, self.ZERO.id, {'color': 'red'}))
         else:
             for char in self.order[index_in_order+1:]:
                 if (nc_count < 1) and (char in nc_string):
@@ -97,7 +97,7 @@ class BDD:
                     node.set_left_child(new_nc_node)
                     self.all_nodes[left_child] = new_nc_node
                     nc_tuple = (node.name, new_nc_node.name, {'color': 'red'})
-                    self.edges.append(nc_tuple)
+                    self.edges.append((node.id, new_nc_node.id, {'color': 'red'}))
                     nc_count += 1
 
         self.add_node(new_pc_node, pc)
