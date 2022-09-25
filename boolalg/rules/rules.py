@@ -68,6 +68,6 @@ def apply_rules(s):
     s = identity_and(s)
     s = identity_or(s)
     s = [i for i in s if i]
-    # s = absorption(s)
+    s = absorption(s)
     s = idempotent(s)
     return s

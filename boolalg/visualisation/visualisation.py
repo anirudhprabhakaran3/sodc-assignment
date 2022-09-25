@@ -16,31 +16,40 @@ def show_tree(bdd):
 
     counter = 1
     temp_counter = 0
-    for node in bdd.all_nodes[1:]:
-        if node == None:
+    if bdd.root() == bdd.ONE or (bdd.root().get_left_child() == bdd.ONE and bdd.root().get_right_child() == bdd.ONE):
+        ONE = (1, 3, 0)
+        nodes[bdd.ONE.get_id()] = ONE
+        bdd.edges = []
+    elif bdd.root() == bdd.ZERO or (bdd.root().get_left_child() == bdd.ZERO and bdd.root().get_right_child() == bdd.ZERO):
+        ZERO = (0, -3, 0)
+        nodes[bdd.ZERO.get_id()] = ZERO
+        bdd.edges = []
+    else:
+        for node in bdd.all_nodes[1:]:
+            if node == None:
+                counter += 1
+                continue
+
+            temp_x = floor(log2(counter))
+            if temp_counter > temp_x:
+                temp_counter = -temp_x
+            y = height - temp_x
+            x = temp_counter
+            temp_counter += 1
             counter += 1
-            continue
 
-        temp_x = floor(log2(counter))
-        if temp_counter > temp_x:
-            temp_counter = -temp_x
-        y = height - temp_x
-        x = temp_counter
-        temp_counter += 1
-        counter += 1
+            if node.name == 1:
+                ONE = (node.name, x, y)
+                continue
 
-        if node.name == 1:
-            ONE = (node.name, x, y)
-            continue
+            if node.name == 0:
+                ZERO = (node.name, x, y)
+                continue
 
-        if node.name == 0:
-            ZERO = (node.name, x, y)
-            continue
-
-        nodes[node.get_id()] = (node.name, x, y)
+            nodes[node.get_id()] = (node.name, x, y)
     
-    nodes[bdd.ONE.get_id()] = ONE
-    nodes[bdd.ZERO.get_id()] = ZERO
+        nodes[bdd.ONE.get_id()] = ONE
+        nodes[bdd.ZERO.get_id()] = ZERO
 
     for (id, node) in nodes.items():
         plt.plot(node[1], node[2], 'go', markersize=20)
@@ -54,23 +63,3 @@ def show_tree(bdd):
         draw_arrow(plt, node1[1:], node2[1:], color)
 
     plt.show()
-
-
-    # g = nx.DiGraph()
-
-    # labelsdict = {}
-
-    # for node in bdd.all_nodes:
-    #     if node == None:
-    #         continue
-    #     g.add_node(node.get_id())
-    #     labelsdict[node.get_id()] = node.name
-
-    # g.add_nodes_from(bdd.order)
-    # g.add_node(1)
-    # g.add_node(0)
-
-    # g.add_edges_from(bdd.edges)
-
-    # nx.draw(g, labels=labelsdict, with_labels=True)
-    # plt.show()

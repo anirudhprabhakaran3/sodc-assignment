@@ -9,15 +9,13 @@ print("3. To denote NOT a, use `a'`")
 print("-"*10)
 
 print("Enter equation:")
-#a = input()
-a = "ab+bc+ca"
+a = input()
 a = process(a)
 
 print("Enter order: ")
 print("Enter order as a comma seperated string. For example, if you want order as c<b<a, enter 'c, b, a'")
 print("-"*10)
-#order = input()
-order = "c, b, a"
+order = input()
 
 bdd = BDD()
 bdd.generate(a, order)

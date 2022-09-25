@@ -3,7 +3,10 @@ def convert_string_to_cubes(s):
         Input: Equation in string format
         Output: List of cubes
     """
-    return s.split("+")
+    s = s.split("+")
+    while '0' in s:
+        s.remove('0')
+    return s
 
 def order(s):
     """
