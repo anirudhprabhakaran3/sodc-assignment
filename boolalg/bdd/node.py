@@ -5,9 +5,15 @@ class Node:
     def __init__(self, name):
         self.id = uuid.uuid4()
         self.name = name
-        self.parent = None
         self.left_child = None
         self.right_child = None
+
+    def print(self):
+        print()
+        print(f"Name: {self.name}")
+        print(f"ID: {self.id}")
+        print(f"Left child: {self.left_child}")
+        print(f"Right Child: {self.right_child}")
 
     def get_left_child(self):
         return self.left_child

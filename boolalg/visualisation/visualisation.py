@@ -25,7 +25,7 @@ def show_tree(bdd):
         nodes[bdd.ZERO.get_id()] = ZERO
         bdd.edges = []
     else:
-        for node in bdd.all_nodes[1:]:
+        for node in bdd.all_nodes:
             if node == None:
                 counter += 1
                 continue
@@ -39,11 +39,11 @@ def show_tree(bdd):
             counter += 1
 
             if node.name == 1:
-                ONE = (node.name, x, y)
+                ONE = (node.name, 1, 0)
                 continue
 
             if node.name == 0:
-                ZERO = (node.name, x, y)
+                ZERO = (node.name, -1, 0)
                 continue
 
             nodes[node.get_id()] = (node.name, x, y)
@@ -56,7 +56,9 @@ def show_tree(bdd):
         plt.annotate(node[0], (node[1], node[2]), size=14)
 
     for edge in bdd.edges:
-        id1, id2, opts = edge
+        node1, node2, opts = edge
+        id1 = node1.id
+        id2 = node2.id
         node1 = nodes[id1]
         node2 = nodes[id2]
         color = opts['color']
